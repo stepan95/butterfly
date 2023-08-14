@@ -168,6 +168,7 @@ h1 {
     }
     #indicator-distance {
         min-width: auto;
+        max-width: 110%;
     }
 
     #screen-size {
