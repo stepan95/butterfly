@@ -71,7 +71,6 @@ h1 {
     color: #fff;
     margin: 0;
     padding: 0;
-    border-radius: 5px;
 }
 
 #top-panel div {
@@ -139,9 +138,15 @@ h1 {
     font-size: 7px;
     }
 
+    #top-panel div p {
+    /* Змініть відступи для кнопок на мобільних екранах */
+    padding: 0 10px;
+    margin: 0;
+    font-size: 7px;
+    }
     #top-panel div p.button {
     /* Змініть відступи для кнопок на мобільних екранах */
-    padding: 5px 10px;
+    padding: 0 10px;
     margin: 0;
     font-size: 7px;
     }
