@@ -9,6 +9,7 @@ body {
     margin: 0;
     font-family: "El Messiri";
     overflow-x: hidden;
+    user-select: none;
 }
 
 h1 {
@@ -16,6 +17,7 @@ h1 {
     text-shadow: #000 1px 1px 2px;
     color: #ccf7ff;
     font-size: 50px;
+    user-select: none;
 }
 
 #games {
@@ -54,6 +56,7 @@ h1 {
     margin: 20px auto;
     border-radius: 5px;
     cursor: pointer;
+    user-select: none;
 }
 
 #top-panel {
