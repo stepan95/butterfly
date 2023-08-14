@@ -1,0 +1,115 @@
+@font-face {
+  font-family: "El Messiri";
+  src: url("../fonts/ElMessiri-VariableFont_wght.ttf");
+}
+body {
+    background: #76ae61;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    font-family: "El Messiri";
+    overflow-x: hidden;
+}
+
+h1 {
+    text-align: center;
+    text-shadow: #000 1px 1px 2px;
+    color: #ccf7ff;
+    font-size: 50px;
+}
+
+#games {
+    margin: auto;
+    display: none;
+    cursor: none;
+    height: 100%;
+    width: auto;
+}
+
+#background {
+    display: flex;
+    position: fixed;
+    top: 0;
+    background-image: url('../img/background.jpg');
+    background-size: cover;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+#start {
+    display: block;
+    background: #0000004f;
+    backdrop-filter: blur(30px);
+    font-weight: 700;
+    font-size: 30px;
+    text-transform: uppercase;
+    color: #fff;
+    padding: 20px 30px;
+    margin: 20px auto;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#top-panel {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0000004f;
+    backdrop-filter: blur(5px);
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+}
+
+#top-panel div {
+    display: inherit;
+}
+
+#top-panel div p {
+    padding: 5px 20px;
+    margin: 0;
+}
+
+#indicator-distance {
+    min-width: 300px;
+}
+
+#top-panel div .button {
+    background: #0000008a;
+    cursor: pointer;
+    transition: all 1s;
+}
+
+#top-panel div .button:hover {
+    background: #5d5d5d8a;
+}
+
+#end-game {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: none;
+    z-index: 9;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: auto;
+}
+
+#end-game p {
+    color: #fff;
+    font-size: 24px;
+}
