@@ -285,7 +285,7 @@ document.getElementsByTagName('body')[0].addEventListener('mousemove', function(
   butterfly.y = mouseY;
 });
 // Оголосити змінну touchY
-let isMobileDevice = isMobileDevice();
+let mobileDevice = isMobileDevice();
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -343,7 +343,7 @@ function animate() {
   rotateButterfly();
   butterfly.draw();
 
-  if (isMobileDevice) {
+  if (mobileDevice) {
     if (touchY !== null) {
       // Обмеження вертикального руху метелика в межах canvas
       butterfly.y = Math.min(canvas.height - 50, Math.max(0, butterfly.y));
