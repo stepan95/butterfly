@@ -145,6 +145,7 @@ h1 {
     margin: 0;
     font-size: 7px;
     }
+
     #top-panel div p.button {
     /* Змініть відступи для кнопок на мобільних екранах */
     padding: 0 10px;
@@ -154,5 +155,13 @@ h1 {
     #games.fullscreen {
       width: 100vw; /* Розмір в ширину на 100% видимої області екрану */
       height: 100vh; /* Розмір висоти на 100% видимої області екрану */
+    }
+}
+@media (max-width: 480px) {
+  #top-panel div p {
+    /* Змініть відступи для кнопок на мобільних екранах */
+    padding: 0 10px;
+    margin: 0;
+    font-size: 7px;
     }
 }
