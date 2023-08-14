@@ -6,6 +6,11 @@ const ctx = canvas.getContext('2d');
 // canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// Перевірка, чи це мобільний пристрій
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 
 const levelsGame = [
   // Рівень 1
@@ -280,20 +285,7 @@ document.getElementsByTagName('body')[0].addEventListener('mousemove', function(
   butterfly.y = mouseY;
 });
 // Оголосити змінну touchY
-let touchY = 0;
-
-// Функція обробки події руху пальця по екрану
-document.getElementsByTagName('body')[0].addEventListener('touchmove', function(event) {
-  let canvasRect = canvas.getBoundingClientRect();
-  touchY = event.touches[0].clientY - canvasRect.top;
-});
-
-// Додати відстеження події торкання екрану
-document.getElementsByTagName('body')[0].addEventListener('touchstart', function(event) {
-  let canvasRect = canvas.getBoundingClientRect();
-  touchY = event.touches[0].clientY - canvasRect.top;
-});
-
+let isMobileDevice = isMobileDevice();
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -351,10 +343,13 @@ function animate() {
   rotateButterfly();
   butterfly.draw();
 
-  if (touchY !== null) {
-    // Обмеження вертикального руху метелика в межах canvas
-    butterfly.y = Math.min(canvas.height - 50, Math.max(0, butterfly.y));
+  if (isMobileDevice) {
+    if (touchY !== null) {
+      // Обмеження вертикального руху метелика в межах canvas
+      butterfly.y = Math.min(canvas.height - 50, Math.max(0, butterfly.y));
+    }
   }
+  
 
   
 
