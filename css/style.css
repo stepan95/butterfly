@@ -136,6 +136,7 @@ h1 {
     #top-panel {
     /* Змініть розмір шрифту для панелі індикаторів на мобільних екранах */
     font-size: 7px;
+    backdrop-filter: blur(0);
     }
 
     #top-panel div p {
