@@ -250,7 +250,7 @@ document.addEventListener('touchmove', (event) => {
         butterfly.r -= 3;
       }
     }
-
+    butterfly.y =deltaY;
     touchY = newY; // Оновлюємо вертикальну координату дотику
   }
 });
