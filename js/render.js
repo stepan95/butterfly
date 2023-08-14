@@ -279,6 +279,20 @@ document.getElementsByTagName('body')[0].addEventListener('mousemove', function(
 
   butterfly.y = mouseY;
 });
+// Оголосити змінну touchY
+let touchY = 0;
+
+// Функція обробки події руху пальця по екрану
+document.getElementsByTagName('body')[0].addEventListener('touchmove', function(event) {
+  let canvasRect = canvas.getBoundingClientRect();
+  touchY = event.touches[0].clientY - canvasRect.top;
+});
+
+// Додати відстеження події торкання екрану
+document.getElementsByTagName('body')[0].addEventListener('touchstart', function(event) {
+  let canvasRect = canvas.getBoundingClientRect();
+  touchY = event.touches[0].clientY - canvasRect.top;
+});
 
 
 function animate() {
