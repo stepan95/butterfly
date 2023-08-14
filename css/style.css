@@ -113,9 +113,17 @@ h1 {
     font-size: 24px;
 }
 
-
-
 /* Медіазапит для маленьких екранів, наприклад, телефонів */
+@media (max-width: 900px) { 
+    #top-panel div p {
+        /* Змініть відступи для кнопок на мобільних екранах */
+        padding: 0 10px;
+        margin: 0;
+        font-size: 10px;
+    }
+}
+
+
 @media (max-width: 767px) {
     body {
     /* Стилі, що застосовуються тільки на екранах ширше 767px */
@@ -136,32 +144,16 @@ h1 {
     #top-panel {
     /* Змініть розмір шрифту для панелі індикаторів на мобільних екранах */
     font-size: 7px;
-    backdrop-filter: blur(0);
-    }
-
-    #top-panel div p {
-    /* Змініть відступи для кнопок на мобільних екранах */
-    padding: 0 10px;
-    margin: 0;
-    font-size: 7px;
     }
 
     #top-panel div p.button {
     /* Змініть відступи для кнопок на мобільних екранах */
-    padding: 0 10px;
+    padding: 5px 10px;
     margin: 0;
     font-size: 7px;
     }
     #games.fullscreen {
       width: 100vw; /* Розмір в ширину на 100% видимої області екрану */
       height: 100vh; /* Розмір висоти на 100% видимої області екрану */
-    }
-}
-@media (max-width: 480px) {
-  #top-panel div p {
-    /* Змініть відступи для кнопок на мобільних екранах */
-    padding: 0 10px;
-    margin: 0;
-    font-size: 7px;
     }
 }
