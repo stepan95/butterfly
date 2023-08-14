@@ -40,6 +40,8 @@ const levelsGame = [
   }
 ];
 
+let touchY = null; // Початкове значення
+
 let endGame = false;
 let distance = 0;
 let keys = 0;
@@ -54,6 +56,7 @@ let bgX = 0; // Початкова позиція фону
 let speedGame = 1; // Швидкість ігри '1'
 let enemyTime = 600; // Час до появи ворога '600'
 let level = 1; // Рівень
+
 
 // Звуки в ігрі
 function load() {
@@ -227,6 +230,31 @@ document.getElementsByTagName('body')[0].addEventListener('mousemove', function(
 
   butterfly.y = mouseY;
 });
+document.addEventListener('touchstart', (event) => {
+  touchY = event.touches[0].clientY; // Запам'ятовуємо вертикальну координату дотику
+});
+
+document.addEventListener('touchmove', (event) => {
+  if (touchY !== null) {
+    const newY = event.touches[0].clientY;
+    const deltaY = newY - touchY;
+
+    if (deltaY > 0) {
+      // Рух пальця вниз
+      if (butterfly.r < 160) {
+        butterfly.r += 3;
+      }
+    } else if (deltaY < 0) {
+      // Рух пальця вгору
+      if (butterfly.r > 20) {
+        butterfly.r -= 3;
+      }
+    }
+
+    touchY = newY; // Оновлюємо вертикальну координату дотику
+  }
+});
+
 
 
 function animate() {
