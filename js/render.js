@@ -40,7 +40,9 @@ const levelsGame = [
   }
 ];
 
-let touchY = null; // Початкове значення
+let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
+let butterflySpeedY = 0; // Швидкість руху метелика по вертикалі
+
 
 let endGame = false;
 let distance = 0;
@@ -195,10 +197,10 @@ let directionForward = true;
 function rotateButterfly() {
   if (butterfly.r > 90) {
     butterfly.r--;
-  }else {
+  } else {
     butterfly.r++;
   }
-  
+
   if (directionForward == true) {
     butterfly.x++;
     if (butterfly.x >= 550) {
@@ -209,9 +211,56 @@ function rotateButterfly() {
     butterfly.x--;
     if (butterfly.x <= 150) {
       directionForward = true;
-    } 
+    }
   }
-} 
+
+  if (butterflyY > butterfly.y) {
+    if (butterfly.r > 20) {
+      butterfly.r -= 3;
+    }
+  } else if (butterflyY < butterfly.y) {
+    if (butterfly.r < 160) {
+      butterfly.r += 3;
+    }
+  }
+
+  butterflyY = butterfly.y;
+}
+
+
+
+document.addEventListener('touchstart', (event) => {
+  touchY = event.touches[0].clientY;
+  butterflySpeedY = 0; // Скидаємо швидкість руху по вертикалі
+});
+
+document.addEventListener('touchmove', (event) => {
+  if (touchY !== null) {
+    const newY = event.touches[0].clientY;
+    const deltaY = newY - touchY;
+
+    butterfly.y += deltaY; // Зміщуємо метелика по вертикалі
+    touchY = newY; // Оновлюємо вертикальну координату дотику
+
+    if (deltaY > 0) {
+      // Рух пальця вниз
+      if (butterfly.r < 160) {
+        butterfly.r += 3;
+      }
+    } else if (deltaY < 0) {
+      // Рух пальця вгору
+      if (butterfly.r > 20) {
+        butterfly.r -= 3;
+      }
+    }
+  }
+});
+
+document.addEventListener('touchend', () => {
+  touchY = null;
+  butterflySpeedY = 0; // Скидаємо швидкість руху по вертикалі
+});
+
 
 document.getElementsByTagName('body')[0].addEventListener('mousemove', function(event) {
 
@@ -230,31 +279,6 @@ document.getElementsByTagName('body')[0].addEventListener('mousemove', function(
 
   butterfly.y = mouseY;
 });
-document.addEventListener('touchstart', (event) => {
-  touchY = event.touches[0].clientY; // Запам'ятовуємо вертикальну координату дотику
-});
-
-document.addEventListener('touchmove', (event) => {
-  if (touchY !== null) {
-    const newY = event.touches[0].clientY;
-    const deltaY = newY - touchY;
-
-    if (deltaY > 0) {
-      // Рух пальця вниз
-      if (butterfly.r < 160) {
-        butterfly.r += 3;
-      }
-    } else if (deltaY < 0) {
-      // Рух пальця вгору
-      if (butterfly.r > 20) {
-        butterfly.r -= 3;
-      }
-    }
-    butterfly.y +=deltaY;
-    touchY = newY; // Оновлюємо вертикальну координату дотику
-  }
-});
-
 
 
 function animate() {
@@ -312,6 +336,13 @@ function animate() {
   butterfly.animation();
   rotateButterfly();
   butterfly.draw();
+
+  if (touchY !== null) {
+    // Обмеження вертикального руху метелика в межах canvas
+    butterfly.y = Math.min(canvas.height - 50, Math.max(0, butterfly.y));
+  }
+
+  
 
   // Перевіряємо зіткнення метелика з ворогами
   for (let i = 0; i < enemies.length; i++) {
