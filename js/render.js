@@ -127,6 +127,7 @@ function load() {
       backgroundMusic.play();
       backgroundMusic.loop = true;
       document.getElementById('background').style.display = 'none';
+      document.getElementById('top-panel').style.display = 'flex';
     });
     
   });
