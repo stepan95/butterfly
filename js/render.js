@@ -307,18 +307,21 @@ function animate() {
     document.getElementById('indicator-level').textContent = 'Рівень: '+level;
     newLevel = 0; 
   }
-  if (newLevel == '5000') {
-    speedGame = 2;
-    clearInterval(enemyInterval);
-    enemyTime = 400;
-    enemyInterval = setInterval(addEnemy, enemyTime);
+  if (!mobileDevice) {
+    if (newLevel == '5000') {
+      speedGame = 2;
+      clearInterval(enemyInterval);
+      enemyTime = 400;
+      enemyInterval = setInterval(addEnemy, enemyTime);
+    }
+    if (newLevel == '10000') {
+      speedGame = 2;
+      clearInterval(enemyInterval);
+      enemyTime = 300;
+      enemyInterval = setInterval(addEnemy, enemyTime);
+    }
   }
-  if (newLevel == '10000') {
-    speedGame = 2;
-    clearInterval(enemyInterval);
-    enemyTime = 300;
-    enemyInterval = setInterval(addEnemy, enemyTime);
-  }
+  
   if (levelsGame.length == level && newLevel >= '15000' && levelsGame[level-1].key <= keys && endGame == false) {
     document.getElementById('end-game').style.display = 'flex';
     setTimeout(function() {document.getElementById('end-game').style.display = 'none';}, 3000);
