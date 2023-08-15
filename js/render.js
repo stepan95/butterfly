@@ -405,7 +405,7 @@ function animate() {
   // Малювати індикацію ігри
   document.getElementById('indicator-life').textContent = 'Життя: '+lives;
   document.getElementById('indicator-key').textContent = 'Ключів: '+keys+' / '+ levelsGame[level-1].key;
-  document.getElementById('indicator-distance').textContent = 'Пройдена відстань: '+(distance/100)+' м.';
+  document.getElementById('indicator-distance').textContent = 'Пройдена відстань: '+(distance/100).toFixed(0)+' м.';
   distance+=1*speedGame;
   distanceLife--;
   if (distanceLife <= 0) {
