@@ -48,7 +48,7 @@ const levelsGame = [
 let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
 let butterflySpeedY = 0; // Швидкість руху метелика по вертикалі
 
-
+let renderGame = false;
 let endGame = false;
 let distance = 0;
 let keys = 0;
@@ -425,9 +425,13 @@ function animate() {
     ctx.fillStyle = '#fff';
     ctx.font = '40px Arial';
     ctx.fillText('Гра завершена', canvas.width / 2 - 100, canvas.height / 2);
+    renderGame = false;
   } else {
     if (!pause) {
+      renderGame = true;
       requestAnimationFrame(animate);
+    }else {
+      renderGame = false;
     }
   }
 }
@@ -476,7 +480,8 @@ document.getElementById('restart').addEventListener('click', () => {
     backgroundMusic.play();
     backgroundMusic.loop = true;
     document.getElementById('indicator-level').textContent = 'Рівень: '+level;
-    render()
+    enemyInterval = setInterval(addEnemy, enemyTime);
+    if (!renderGame) animate();
 });
 
 document.getElementById('screen-size').addEventListener('click', () => {
