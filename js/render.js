@@ -264,27 +264,27 @@ document.addEventListener('touchend', () => {
   touchX = null;
 });
 
+if (!mobileDevice) {
+  document.getElementsByTagName('body')[0].addEventListener('mousemove', function(event) {
 
-document.getElementsByTagName('body')[0].addEventListener('mousemove', function(event) {
+    let canvasRect = canvas.getBoundingClientRect();
+    let mouseY = event.clientY - canvasRect.top;
+    let mouseX = event.clientX - canvasRect.left;
 
-  let canvasRect = canvas.getBoundingClientRect();
-  let mouseY = event.clientY - canvasRect.top;
-  let mouseX = event.clientX - canvasRect.left;
-
-  if (butterfly.y > mouseY) {
-    if (butterfly.r > 20) {
-      butterfly.r-=3;
+    if (butterfly.y > mouseY) {
+      if (butterfly.r > 20) {
+        butterfly.r-=3;
+      }
+    }else if (butterfly.y < mouseY) {
+      if (butterfly.r < 160) {
+      butterfly.r+=3;
+      }
     }
-  }else if (butterfly.y < mouseY) {
-    if (butterfly.r < 160) {
-    butterfly.r+=3;
-    }
-  }
 
-  butterfly.y = mouseY;
-  butterfly.x = mouseX;
-});
-
+    butterfly.y = mouseY;
+    butterfly.x = mouseX;
+  });
+}
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
