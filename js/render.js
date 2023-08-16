@@ -58,7 +58,7 @@ let distanceKeys = 1500;
 let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage;
 let enemyInterval;
 let newLevel = 0;
-let lives = 600; // Кількість життів '6'
+let lives = 6; // Кількість життів '6'
 let distanceLife = 1000; // Дестанція для життя '1000'
 let bgX = 0; // Початкова позиція фону
 let speedGame = 1; // Швидкість ігри '1'
