@@ -237,7 +237,7 @@ document.addEventListener('touchmove', (event) => {
     const newY = event.touches[0].clientY;
     const deltaY = newY - touchY;
 
-    butterfly.y += deltaY*4; // Зміщуємо метелика по вертикалі
+    butterfly.y += deltaY*3; // Зміщуємо метелика по вертикалі
     touchY = newY; // Оновлюємо вертикальну координату дотику
 
     if (deltaY > 0) {
@@ -256,7 +256,7 @@ document.addEventListener('touchmove', (event) => {
     const newX = event.touches[0].clientX;
     const deltaX = newX - touchX;
 
-    butterfly.x += deltaX; // Зміщуємо метелика по горизонталі
+    butterfly.x += deltaX*3; // Зміщуємо метелика по горизонталі
     touchX = newX; // Оновлюємо вертикальну координату дотику
   }
 });
