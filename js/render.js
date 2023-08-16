@@ -47,15 +47,22 @@ const levelsGame = [
   }
 ];
 
+// Унікальні рівні
+function level_2() {
+
+}
+function level_5() {
+
+}
+
 let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
 let renderGame = false;
 let endGame = false;
 let distance = 0;
 let keys = 0;
 let pause = false;
-let distanceKeys = 1500;
-let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage;
-let enemyInterval;
+let distanceKeys = 2500; // Відстань до ключа
+let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage, enemyInterval;
 let newLevel = 0;
 let lives = 6; // Кількість життів '6'
 let distanceLife = 1000; // Дестанція для життя '1000'
@@ -64,6 +71,7 @@ let speedGame = 1; // Швидкість ігри '1'
 let enemyTime = 600; // Час до появи ворога '600'
 let level = 1; // Рівень
 
+// Загрузка гри
 let loading = {
   level: false,
   begin: 0, 
@@ -95,10 +103,12 @@ function loadingImage(img) {
         backgroundMusic.play();
         backgroundMusic.loop = true;
         document.getElementById('indicator-level').textContent = 'Рівень: '+level;
-        
+        clearInterval(enemyInterval);
+        enemyTime = 600;
+        enemies = [];
         if (!renderGame) render();
         setTimeout(function() {
-          enemyInterval = setInterval(addEnemy, enemyTime);
+          if (!pause) enemyInterval = setInterval(addEnemy, enemyTime);
         }, 3000)
       }, 1000);
     }
@@ -202,28 +212,29 @@ const butterfly = {
     ctx.rotate(this.r * Math.PI / 180);
     ctx.drawImage(butterflyImage, this.frames[this.frame], 0, 250, 200, -(62.5/2), -(50/2), 62.5, 50);
     ctx.restore();
+  },
+  rotateButterfly() {
+    if (this.r > 90) {
+      this.r--;
+    } else {
+      this.r++;
+    }
+
+    if (butterflyY > this.y) {
+      if (this.r > 20) {
+        this.r -= 3;
+      }
+    } else if (butterflyY < this.y) {
+      if (this.r < 160) {
+        this.r += 3;
+      }
+    }
+
+    butterflyY = this.y;
   }
 }
 
-function rotateButterfly() {
-  if (butterfly.r > 90) {
-    butterfly.r--;
-  } else {
-    butterfly.r++;
-  }
 
-  if (butterflyY > butterfly.y) {
-    if (butterfly.r > 20) {
-      butterfly.r -= 3;
-    }
-  } else if (butterflyY < butterfly.y) {
-    if (butterfly.r < 160) {
-      butterfly.r += 3;
-    }
-  }
-
-  butterflyY = butterfly.y;
-}
 
 
 
@@ -237,7 +248,7 @@ document.addEventListener('touchmove', (event) => {
     const newY = event.touches[0].clientY;
     const deltaY = newY - touchY;
 
-    butterfly.y += deltaY*3; // Зміщуємо метелика по вертикалі
+    butterfly.y += deltaY*4; // Зміщуємо метелика по вертикалі
     touchY = newY; // Оновлюємо вертикальну координату дотику
 
     if (deltaY > 0) {
@@ -256,7 +267,7 @@ document.addEventListener('touchmove', (event) => {
     const newX = event.touches[0].clientX;
     const deltaX = newX - touchX;
 
-    butterfly.x += deltaX*3; // Зміщуємо метелика по горизонталі
+    butterfly.x += deltaX; // Зміщуємо метелика по горизонталі
     touchX = newX; // Оновлюємо вертикальну координату дотику
   }
 });
@@ -288,6 +299,9 @@ if (!mobileDevice) {
   });
 }
 
+
+
+
 function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
@@ -295,10 +309,7 @@ function render() {
   if (levelsGame.length != level && newLevel >= '15000' && levelsGame[level-1].key <= keys) {
     keys -= levelsGame[level-1].key;
     level++;
-    speedGame = 1;
-    clearInterval(enemyInterval);
-    enemyTime = 600;
-    enemies = [];
+    speedGame = 1; 
     backgroundMusic.pause();
     load();
     document.getElementById('indicator-level').textContent = 'Рівень: '+level;
@@ -330,7 +341,6 @@ function render() {
   // Малюємо дві копії фонового зображення для створення безшовного ефекту
   ctx.drawImage(backgroundImage, bgX, 0, canvas.width, canvas.height);
   ctx.drawImage(backgroundImage, bgX + canvas.width, 0, canvas.width, canvas.height);
-
   // Зміщуємо позицію фону
   bgX -= 1 * speedGame; // Змінюйте це значення для зміни швидкості руху
 
@@ -339,9 +349,15 @@ function render() {
       bgX = 0;
   }
 
+
+  // Малюємо унікальні рівні
+  level_2();
+  level_5();
+
+
   // Запускаємо метелика
   butterfly.animation();
-  rotateButterfly();
+  butterfly.rotateButterfly();
   butterfly.draw();
 
   if (mobileDevice) {
@@ -404,6 +420,7 @@ function render() {
   document.getElementById('indicator-life').textContent = 'Життя: '+lives;
   document.getElementById('indicator-key').textContent = 'Ключів: '+keys+' / '+ levelsGame[level-1].key;
   document.getElementById('indicator-distance').textContent = 'Пройдена відстань: '+(distance/100).toFixed(0)+' м.';
+
   distance+=1*speedGame;
   distanceLife--;
   if (distanceLife <= 0) {
@@ -415,6 +432,7 @@ function render() {
     addKey();
     distanceKeys = 2500;
   }
+
   // Перевіряємо кількість життів
   if (lives <= 0) {
     // Гра закінчилася, додайте тут логіку завершення гри
@@ -460,9 +478,6 @@ document.getElementById('restart').addEventListener('click', () => {
     newLevel = 0;
     level = 1;
     speedGame = 1;
-    clearInterval(enemyInterval);
-    enemyTime = 600;
-    enemies = [];
     backgroundMusic.pause();
     distance = 0;
     lives = 6;
