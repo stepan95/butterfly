@@ -48,7 +48,6 @@ const levelsGame = [
 ];
 
 let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
-
 let renderGame = false;
 let endGame = false;
 let distance = 0;
@@ -58,83 +57,89 @@ let distanceKeys = 1500;
 let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage;
 let enemyInterval;
 let newLevel = 0;
-let lives = 6; // Кількість життів '6'
+let lives = 6000; // Кількість життів '6'
 let distanceLife = 1000; // Дестанція для життя '1000'
 let bgX = 0; // Початкова позиція фону
 let speedGame = 1; // Швидкість ігри '1'
 let enemyTime = 600; // Час до появи ворога '600'
 let level = 1; // Рівень
 
-
-// Звуки в ігрі
-function load() {
-  collisionSound = new Audio('sound/collision.mp3');
-  collisionSound.preload = 'auto';
-  collisionSound.load();
-  lifeSound = new Audio('sound/life.mp3');
-  lifeSound.preload = 'auto';
-  lifeSound.load();
-  backgroundMusic = new Audio('sound/background-music'+levelsGame[level-1].sound+'.mp3');
-  backgroundMusic.preload = 'auto';
-  backgroundMusic.load();
-
-  // Загружажмо зображення для ігри
-  backgroundImage = new Image();
-  backgroundImage.src = 'img/'+levelsGame[level-1].theme+'/grass.png';
-
-  butterflyImage = new Image();
-  butterflyImage.src = 'img/butterfly-a.png';
-
-
-  garbage = [];
-  for(let i = 0; i < 5; i++){
-    garbage.push(new Image());
-    garbage[i].src = 'img/'+levelsGame[level-1].theme+'/garbage-'+i+'.png';
-  }
-
-  lifeImage = new Image();
-  lifeImage.src = 'img/life.png';
-
-  keyImage = new Image();
-  keyImage.src = 'img/key.png';
-
-
-  // Завантаження всіх ресурсів
-  Promise.all([
-    new Promise((resolve, reject) => {
-      backgroundImage.onload = resolve;
-      backgroundImage.onerror = reject;
-    }),
-    new Promise((resolve, reject) => {
-      lifeImage.onload = resolve;
-      lifeImage.onerror = reject;
-    }),
-    new Promise((resolve, reject) => {
-      keyImage.onload = resolve;
-      keyImage.onerror = reject;
-    }),
-    // Додайте решту зображень та звуків тут
-  ]).then(() => {
-    // Всі ресурси завантажені, можна запускати гру
-    document.getElementById('start').addEventListener('click', () => {
-      // Встановлюємо розмір canvas на весь екран
-      // canvas.width = window.screen.width;
-      canvas.height = window.screen.height;
-      canvas.style.display = 'block';
-      // Увійти в повноекранний режим
-      document.getElementsByTagName('body')[0].requestFullscreen();
-      render();
-      // Запуск фонової музики
-      backgroundMusic.play();
-      backgroundMusic.loop = true;
-      document.getElementById('background').style.display = 'none';
-      document.getElementById('top-panel').style.display = 'flex';
-    });
-    
-  });
+let loading = {
+  level: false,
+  begin: 0, 
+  end: 0
+}
+// Загружажмо зображення для ігри
+function loadingImage(img) {
+  loading.begin++;
+  loading.level = false;
+  const load = new Image();
+  load.src = img;
+  load.onload = function() {
+    loading.end++;
+    const indicator = document.getElementById('loading');
+    indicator.style.display = 'flex';
+    let percentage = 0;
+    if (loading.begin !== 0) {
+      percentage = Math.floor((loading.end * 100) / loading.begin);
+    }
+    indicator.getElementsByTagName('p')[0].textContent = 'Завантажено '+percentage+'%';
+    if (loading.end == loading.begin) {
+      loading.begin = 0;
+      loading.end = 0;
+      
+      setTimeout(function() {
+        indicator.style.display = 'none';
+        loading.level = true;
+        // Запуск фонової музики
+        backgroundMusic.play();
+        backgroundMusic.loop = true;
+        document.getElementById('indicator-level').textContent = 'Рівень: '+level;
+        
+        if (!renderGame) render();
+        setTimeout(function() {
+          enemyInterval = setInterval(addEnemy, enemyTime);
+        }, 3000)
+      }, 1000);
+    }
+  };
+  return load;
 }
 
-load();
+// Звуки в ігрі
+function loadingSound(audio) {
+  const load = new Audio(audio);
+  load.preload = 'auto';
+  load.load();
+  return load;
+}
+
+function load() {
+  collisionSound = loadingSound('sound/collision.mp3');
+  lifeSound = loadingSound('sound/life.mp3');
+  backgroundMusic = loadingSound('sound/background-music'+levelsGame[level-1].sound+'.mp3');
+
+  backgroundImage = loadingImage('img/'+levelsGame[level-1].theme+'/grass.png');
+  butterflyImage = loadingImage('img/butterfly-a.png');
+  garbage = [];
+  for(let i = 0; i < 5; i++){
+    garbage[i] = loadingImage('img/'+levelsGame[level-1].theme+'/garbage-'+i+'.png');
+  }
+  lifeImage = loadingImage('img/life.png');
+  keyImage = loadingImage('img/key.png');
+}
+  // Старт
+document.getElementById('start').addEventListener('click', () => {
+  // Встановлюємо розмір canvas на весь екран
+  // canvas.width = window.screen.width;
+  canvas.height = window.screen.height;
+  canvas.style.display = 'block';
+  // Увійти в повноекранний режим
+  document.getElementsByTagName('body')[0].requestFullscreen();
+  load();
+  document.getElementById('background').style.display = 'none';
+  document.getElementById('top-panel').style.display = 'flex';
+});
 
 
 
@@ -218,9 +223,6 @@ function rotateButterfly() {
   }
 
   butterflyY = butterfly.y;
-  // if (butterfly.x > 100) {
-  //   butterfly.x--;
-  // }
 }
 
 
@@ -286,7 +288,7 @@ if (!mobileDevice) {
   });
 }
 
-function animate() {
+function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   
@@ -297,11 +299,8 @@ function animate() {
     clearInterval(enemyInterval);
     enemyTime = 600;
     enemies = [];
-    enemyInterval = setInterval(addEnemy, enemyTime);
     backgroundMusic.pause();
     load();
-    backgroundMusic.play();
-    backgroundMusic.loop = true;
     document.getElementById('indicator-level').textContent = 'Рівень: '+level;
     newLevel = 0; 
   }
@@ -428,20 +427,11 @@ function animate() {
   } else {
     if (!pause) {
       renderGame = true;
-      requestAnimationFrame(animate);
+      requestAnimationFrame(render);
     }else {
       renderGame = false;
     }
   }
-}
-
-
-function render() {
-
-  animate();
-
-  // Додати нового ворога з інтервалом
-  enemyInterval = setInterval(addEnemy, enemyTime); // Додавати нового ворога кожні 2 секунди
 }
 
 
@@ -459,6 +449,8 @@ document.getElementById('pause').addEventListener('click', () => {
     pause = false;
     backgroundMusic.play();
     render();
+    // Додати нового ворога з інтервалом
+    enemyInterval = setInterval(addEnemy, enemyTime); // Додавати нового ворога кожні 2 секунди
   }
 
 });
@@ -476,11 +468,6 @@ document.getElementById('restart').addEventListener('click', () => {
     lives = 6;
     endGame = false;
     load();
-    backgroundMusic.play();
-    backgroundMusic.loop = true;
-    document.getElementById('indicator-level').textContent = 'Рівень: '+level;
-    enemyInterval = setInterval(addEnemy, enemyTime);
-    if (!renderGame) animate();
 });
 
 document.getElementById('screen-size').addEventListener('click', () => {
