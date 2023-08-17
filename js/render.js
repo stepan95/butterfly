@@ -220,7 +220,7 @@ function load() {
   if (level == 2) {
     car = [];
     for(let i = 0; i < 8; i++){
-      car[i] = loadingImage('img/car/car-'+i+1+'.png');
+      car[i] = loadingImage('img/car/car-'+(i+1)+'.png');
     }
   } else if (level == 5) {
     car = [];
