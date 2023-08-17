@@ -182,7 +182,6 @@ function loadingImage(img) {
         backgroundMusic.play();
         backgroundMusic.loop = true;
         document.getElementById('indicator-level').textContent = 'Рівень: '+level;
-        clearInterval(enemyInterval);
         enemyTime = 600;
         enemies = [];
         if (!renderGame) render();
@@ -204,6 +203,7 @@ function loadingSound(audio) {
 }
 
 function load() {
+  clearInterval(enemyInterval);
   collisionSound = loadingSound('sound/collision.mp3');
   lifeSound = loadingSound('sound/life.mp3');
   backgroundMusic = loadingSound('sound/background-music'+levelsGame[level-1].sound+'.mp3');
@@ -230,7 +230,7 @@ function load() {
     backgroundImage_2 = loadingImage('img/'+levelsGame[level-1].theme+'/grass-2.png');
   }
 }
-  // Старт
+// Старт
 document.getElementById('start').addEventListener('click', () => {
   // Встановлюємо розмір canvas на весь екран
   // canvas.width = window.screen.width;
