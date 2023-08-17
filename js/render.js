@@ -47,12 +47,91 @@ const levelsGame = [
   }
 ];
 
+// Малюємо авто
+class cars {
+  constructor() {
+    this.cars = [
+      [191, 63],
+      [86, 33],
+      [92, 42],
+      [84, 38],
+      [81, 40],
+      [88, 40],
+      [88, 43],
+      [81, 40],
+    ];
+    this.x = 0;
+    this.y = 0;
+    this.r = 0;
+    this.model = Math.floor(Math.random() * 7);
+  }
+  draw() {
+    ctx.save();
+    ctx.translate(this.x+this.cars[this.model][0]/2, this.y-this.cars[this.model][1]/2);
+    ctx.rotate(this.r * Math.PI / 180);
+    ctx.drawImage(car[this.model], -this.cars[this.model][0]/2, -this.cars[this.model][1]/2, this.cars[this.model][0], this.cars[this.model][1]); 
+    ctx.restore();
+  }
+}
+
+
+let arrayСarsTop = [];
+let arrayСarsBottom = [];
+let distanceСarsTop = 0;
+let distanceСarsBottom = 0;
+const roadTop = [205,250,295,340];
+const roadBottom = [410,450,500,545];
+// Створюємо авто на дорозі для 5 рівня
+function addСars() {
+  if (distanceСarsTop == 0) {
+    let car = new cars();
+    car.x=+canvas.width;
+    car.y =+ roadTop[Math.floor(Math.random() * 3)];
+    arrayСarsTop.push(car);
+    distanceСarsTop=50;
+  }
+  if (distanceСarsBottom == 0) {
+    let car = new cars();
+    car.r = 180;
+    car.x-=200;
+    car.y += car.cars[car.model][1];
+    car.y += roadBottom[Math.floor(Math.random() * 3)];
+    arrayСarsBottom.push(car);
+    distanceСarsBottom=200;
+  }
+  distanceСarsTop--;
+  distanceСarsBottom--;
+}
+
+
 // Унікальні рівні
 function level_2() {
 
 }
 function level_5() {
+  addСars();
+  // Ставимо машину на свою полосу
+  for (let i = 0; i < arrayСarsTop.length; i++) {
+    arrayСarsTop[i].x-=4;
+    arrayСarsTop[i].draw();
+    if (arrayСarsTop[i].x <= -200) {
+      arrayСarsTop.splice(i, 1);
+    }
+  }
 
+  for (let i = 0; i < arrayСarsBottom.length; i++) {
+    arrayСarsBottom[i].x++;
+    arrayСarsBottom[i].draw();
+    if (arrayСarsBottom[i].x >= canvas.width) {
+      arrayСarsBottom.splice(i, 1);
+    }
+  }
+
+  // Малюємо дві копії фонового зображення для створення безшовного ефекту
+  ctx.drawImage(backgroundImage_2, bgX, 0, canvas.width, canvas.height);
+  ctx.drawImage(backgroundImage_2, bgX + canvas.width, 0, canvas.width, canvas.height);
+  
+  
 }
 
 let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
@@ -62,7 +141,7 @@ let distance = 0;
 let keys = 0;
 let pause = false;
 let distanceKeys = 2500; // Відстань до ключа
-let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage, enemyInterval;
+let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage, enemyInterval, backgroundImage_2, car;
 let newLevel = 0;
 let lives = 6; // Кількість життів '6'
 let distanceLife = 1000; // Дестанція для життя '1000'
@@ -137,6 +216,19 @@ function load() {
   }
   lifeImage = loadingImage('img/life.png');
   keyImage = loadingImage('img/key.png');
+
+  if (level == 2) {
+    car = [];
+    for(let i = 0; i < 8; i++){
+      car[i] = loadingImage('img/car/car-'+i+1+'.png');
+    }
+  } else if (level == 5) {
+    car = [];
+    for(let i = 0; i < 8; i++){
+      car[i] = loadingImage('img/car/car-'+(i+1)+'.png');
+    }
+    backgroundImage_2 = loadingImage('img/'+levelsGame[level-1].theme+'/grass-2.png');
+  }
 }
   // Старт
 document.getElementById('start').addEventListener('click', () => {
@@ -248,7 +340,7 @@ document.addEventListener('touchmove', (event) => {
     const newY = event.touches[0].clientY;
     const deltaY = newY - touchY;
 
-    butterfly.y += deltaY*4; // Зміщуємо метелика по вертикалі
+    butterfly.y += deltaY*3; // Зміщуємо метелика по вертикалі
     touchY = newY; // Оновлюємо вертикальну координату дотику
 
     if (deltaY > 0) {
@@ -267,7 +359,7 @@ document.addEventListener('touchmove', (event) => {
     const newX = event.touches[0].clientX;
     const deltaX = newX - touchX;
 
-    butterfly.x += deltaX; // Зміщуємо метелика по горизонталі
+    butterfly.x += deltaX*3; // Зміщуємо метелика по горизонталі
     touchX = newX; // Оновлюємо вертикальну координату дотику
   }
 });
@@ -352,7 +444,8 @@ function render() {
 
   // Малюємо унікальні рівні
   level_2();
-  level_5();
+  if (level == 5) level_5();
+
 
 
   // Запускаємо метелика
