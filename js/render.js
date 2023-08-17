@@ -143,6 +143,62 @@ function level_2() {
 }
 
 
+
+// Хвиі
+let wave = [
+{y: 380, h: 95, alpha: 1, wave: true},
+{y: 500, h: 95, alpha: 1, wave: false},
+{y: 450, h: 95, alpha: 1, wave: false},
+{y: 600, h: 95, alpha: 1, wave: false},
+{y: 750, h: 95, alpha: 1, wave: false},
+{y: 900, h: 95, alpha: 1, wave: false},
+{y: 1000, h: 95, alpha: 1, wave: false},
+];
+
+
+// Створюємо хвилю
+function addWave(i) {
+  if (wave[i].wave) {
+    if (wave[i].h <= 200) {
+      wave[i].h+=0.3;
+    }else {
+      if (wave[i].alpha >= 0.01) {
+        wave[i].h++;
+        wave[i].alpha -= 0.01
+        wave[i].wave = false;
+      }
+    }
+  }
+  
+  if (!wave[i].wave) {
+    if (wave[i].alpha === 1) {
+      if (wave[i].y >= 380) {
+        wave[i].y-=0.3;
+      }else {
+        wave[i].wave = true;
+      }
+    }else {
+      wave[i].alpha = 1;
+      wave[i].h = 95;
+      wave[i].y = 1000;
+    }
+    
+  }
+
+  ctx.globalAlpha = wave[i].alpha;  
+  ctx.drawImage(backgroundImage_2, bgX, wave[i].y, canvas.width, wave[i].h);
+  ctx.drawImage(backgroundImage_2, bgX + canvas.width, wave[i].y, canvas.width, wave[i].h);
+
+  ctx.globalAlpha = 1;
+}
+// Унікальні рівні
+function level_3() {
+  for (let i = 0; i < 7; i++) {
+    addWave(i); // Виклик функції з індексом циклу
+  }
+}
+
+
 // Для 5 рівня
 let arrayСarsTop = [];
 let arrayСarsBottom = [];
@@ -229,8 +285,6 @@ function loadingImage(img) {
         backgroundMusic.play();
         backgroundMusic.loop = true;
         document.getElementById('indicator-level').textContent = 'Рівень: '+level;
-        enemyTime = 600;
-        enemies = [];
         if (!renderGame) render();
         setTimeout(function() {
           if (!pause) enemyInterval = setInterval(addEnemy, enemyTime);
@@ -251,6 +305,8 @@ function loadingSound(audio) {
 
 function load() {
   clearInterval(enemyInterval);
+  enemyTime = 600;
+  enemies = [];
   collisionSound = loadingSound('sound/collision.mp3');
   lifeSound = loadingSound('sound/life.mp3');
   backgroundMusic = loadingSound('sound/background-music'+levelsGame[level-1].sound+'.mp3');
@@ -269,6 +325,8 @@ function load() {
     for(let i = 0; i < 8; i++){
       car[i] = loadingImage('img/car/car-'+(i+1)+'.png');
     }
+  }else  if (level == 3){
+    backgroundImage_2 = loadingImage('img/'+levelsGame[level-1].theme+'/grass-2.png');
   } else if (level == 5) {
     car = [];
     for(let i = 0; i < 8; i++){
@@ -491,6 +549,7 @@ function render() {
 
   // Малюємо унікальні рівні
   if (level == 2) level_2();
+  if (level == 3) level_3();
   if (level == 5) level_5();
 
 
