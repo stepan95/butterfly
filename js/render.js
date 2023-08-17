@@ -114,7 +114,7 @@ function addСars_2() {
     car.y = -200;
     car.distance = roadRight[Math.round(Math.random())];
     arrayСarsRight.push(car);
-    distanceСarsRight=2000;
+    distanceСarsRight=1700;
   }
   distanceСarsleft--;
   distanceСarsRight--;
