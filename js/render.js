@@ -47,6 +47,22 @@ const levelsGame = [
   }
 ];
 
+let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
+let renderGame = false;
+let endGame = false;
+let distance = 0;
+let keys = 0;
+let pause = false;
+let distanceKeys = 2500; // Відстань до ключа
+let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage, enemyInterval, backgroundImage_2, car;
+let newLevel = 0;
+let lives = 6; // Кількість життів '6'
+let distanceLife = 1000; // Дестанція для життя '1000'
+let bgX = 0; // Початкова позиція фону
+let speedGame = 1; // Швидкість ігри '1'
+let enemyTime = 600; // Час до появи ворога '600'
+let level = 1; // Рівень
+
 // Малюємо авто
 class cars {
   constructor() {
@@ -74,7 +90,60 @@ class cars {
   }
 }
 
+// Для 2 рівня
+let arrayСarsleft = [];
+let arrayСarsRight = [];
+let distanceСarsleft = 0;
+let distanceСarsRight = 0;
+const roadleft = [5,70];
+const roadRight = [-170,-120];
+// Створюємо авто на дорозі для 5 рівня
+function addСars_2() {
 
+  if (distanceСarsleft == 0) {
+    let car = new cars();
+    car.r = 90;
+    car.y=+canvas.height;
+    car.distance = roadleft[Math.round(Math.random())];
+    arrayСarsleft.push(car);
+    distanceСarsleft=2000;
+  }
+  if (distanceСarsRight == 0) {
+    let car = new cars();
+    car.r = 270;
+    car.y = -200;
+    car.distance = roadRight[Math.round(Math.random())];
+    arrayСarsRight.push(car);
+    distanceСarsRight=2000;
+  }
+  distanceСarsleft--;
+  distanceСarsRight--;
+}
+// Унікальні рівні
+function level_2() {
+  addСars_2();
+  // Ставимо машину на свою полосу
+  for (let i = 0; i < arrayСarsleft.length; i++) {
+    arrayСarsleft[i].x = arrayСarsleft[i].distance+bgX+canvas.width;
+    arrayСarsleft[i].y-=4;
+    arrayСarsleft[i].draw();
+    if (arrayСarsleft[i].y <= 0) {
+      arrayСarsleft.splice(i, 1);
+    }
+  }
+
+  for (let i = 0; i < arrayСarsRight.length; i++) {
+    arrayСarsRight[i].x = arrayСarsRight[i].distance+bgX+canvas.width;
+    arrayСarsRight[i].y+=4;
+    arrayСarsRight[i].draw();
+    if (arrayСarsRight[i].y >= canvas.height+200) {
+      arrayСarsRight.splice(i, 1);
+    }
+  }
+}
+
+
+// Для 5 рівня
 let arrayСarsTop = [];
 let arrayСarsBottom = [];
 let distanceСarsTop = 0;
@@ -82,7 +151,7 @@ let distanceСarsBottom = 0;
 const roadTop = [205,250,295,340];
 const roadBottom = [410,450,500,545];
 // Створюємо авто на дорозі для 5 рівня
-function addСars() {
+function addСars_5() {
   if (distanceСarsTop == 0) {
     let car = new cars();
     car.x=+canvas.width;
@@ -102,14 +171,8 @@ function addСars() {
   distanceСarsTop--;
   distanceСarsBottom--;
 }
-
-
-// Унікальні рівні
-function level_2() {
-
-}
 function level_5() {
-  addСars();
+  addСars_5();
   // Ставимо машину на свою полосу
   for (let i = 0; i < arrayСarsTop.length; i++) {
     arrayСarsTop[i].x-=4;
@@ -130,25 +193,9 @@ function level_5() {
   // Малюємо дві копії фонового зображення для створення безшовного ефекту
   ctx.drawImage(backgroundImage_2, bgX, 0, canvas.width, canvas.height);
   ctx.drawImage(backgroundImage_2, bgX + canvas.width, 0, canvas.width, canvas.height);
-  
-  
 }
 
-let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
-let renderGame = false;
-let endGame = false;
-let distance = 0;
-let keys = 0;
-let pause = false;
-let distanceKeys = 2500; // Відстань до ключа
-let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage, enemyInterval, backgroundImage_2, car;
-let newLevel = 0;
-let lives = 6; // Кількість життів '6'
-let distanceLife = 1000; // Дестанція для життя '1000'
-let bgX = 0; // Початкова позиція фону
-let speedGame = 1; // Швидкість ігри '1'
-let enemyTime = 600; // Час до появи ворога '600'
-let level = 1; // Рівень
+
 
 // Загрузка гри
 let loading = {
@@ -443,7 +490,7 @@ function render() {
 
 
   // Малюємо унікальні рівні
-  level_2();
+  if (level == 2) level_2();
   if (level == 5) level_5();
 
 
