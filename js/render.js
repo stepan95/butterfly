@@ -146,13 +146,13 @@ function level_2() {
 
 // Хвиі
 let wave = [
-{y: 380, h: 95, alpha: 1, wave: true},
-{y: 500, h: 95, alpha: 1, wave: false},
-{y: 450, h: 95, alpha: 1, wave: false},
-{y: 600, h: 95, alpha: 1, wave: false},
-{y: 750, h: 95, alpha: 1, wave: false},
-{y: 900, h: 95, alpha: 1, wave: false},
-{y: 1000, h: 95, alpha: 1, wave: false},
+{y: 380, x: 0, h: 95, alpha: 1, wave: true},
+{y: 500, x: -234, h: 95, alpha: 1, wave: false},
+{y: 450, x: -354, h: 95, alpha: 1, wave: false},
+{y: 600, x: -500, h: 95, alpha: 1, wave: false},
+{y: 750, x: -1223, h: 95, alpha: 1, wave: false},
+{y: 900, x: -800, h: 95, alpha: 1, wave: false},
+{y: 1000, x: -400, h: 95, alpha: 1, wave: false},
 ];
 
 
@@ -160,12 +160,14 @@ let wave = [
 function addWave(i) {
   if (wave[i].wave) {
     if (wave[i].h <= 200) {
-      wave[i].h+=0.3;
+      wave[i].h+=0.2;
     }else {
       if (wave[i].alpha >= 0.01) {
         wave[i].h++;
-        wave[i].alpha -= 0.01
-        wave[i].wave = false;
+        wave[i].alpha -= 0.005;
+        if (wave[i].alpha <= 0.01) {
+          wave[i].wave = false;
+        }
       }
     }
   }
@@ -186,14 +188,15 @@ function addWave(i) {
   }
 
   ctx.globalAlpha = wave[i].alpha;  
-  ctx.drawImage(backgroundImage_2, bgX, wave[i].y, canvas.width, wave[i].h);
-  ctx.drawImage(backgroundImage_2, bgX + canvas.width, wave[i].y, canvas.width, wave[i].h);
+  ctx.drawImage(backgroundImage_2, wave[i].x+bgX, wave[i].y, canvas.width, wave[i].h);
+  ctx.drawImage(backgroundImage_2, wave[i].x+bgX + canvas.width, wave[i].y, canvas.width, wave[i].h);
+  ctx.drawImage(backgroundImage_2, wave[i].x+bgX + canvas.width + canvas.width, wave[i].y, canvas.width, wave[i].h);
 
   ctx.globalAlpha = 1;
 }
 // Унікальні рівні
 function level_3() {
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < wave.length; i++) {
     addWave(i); // Виклик функції з індексом циклу
   }
 }
