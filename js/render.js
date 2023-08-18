@@ -158,12 +158,9 @@ function level_2() {
 // Хвиі
 let wave = [
 {y: 380+landslide, x: 0, h: 95, alpha: 1, wave: true},
-{y: 500+landslide, x: -234, h: 95, alpha: 1, wave: false},
-{y: 450+landslide, x: -354, h: 95, alpha: 1, wave: false},
-{y: 600+landslide, x: -500, h: 95, alpha: 1, wave: false},
-{y: 750+landslide, x: -1223, h: 95, alpha: 1, wave: false},
-{y: 900+landslide, x: -800, h: 95, alpha: 1, wave: false},
-{y: 1000+landslide, x: -400, h: 95, alpha: 1, wave: false},
+{y: 590+landslide, x: -234, h: 95, alpha: 1, wave: false},
+{y: 800+landslide, x: -354, h: 95, alpha: 1, wave: false},
+{y: 1000+landslide, x: -500, h: 95, alpha: 1, wave: false},
 ];
 
 
