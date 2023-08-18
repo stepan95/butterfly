@@ -47,6 +47,8 @@ const levelsGame = [
   }
 ];
 
+
+
 let butterflyY = canvas.height / 2; // Початкове положення метелика по вертикалі
 let renderGame = false;
 let endGame = false;
@@ -54,14 +56,23 @@ let distance = 0;
 let keys = 0;
 let pause = false;
 let distanceKeys = 2500; // Відстань до ключа
-let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage, enemyInterval, backgroundImage_2, car;
+let collisionSound, lifeSound, backgroundMusic, backgroundImage, butterflyImage, garbage, lifeImage, enemyInterval, backgroundImage_2, car, landslides;
 let newLevel = 0;
 let lives = 6; // Кількість життів '6'
 let distanceLife = 1000; // Дестанція для життя '1000'
 let bgX = 0; // Початкова позиція фону
 let speedGame = 1; // Швидкість ігри '1'
 let enemyTime = 600; // Час до появи ворога '600'
-let level = 1; // Рівень
+let level = 5; // Рівень
+let landslide = 0; // Зсув
+
+
+
+if (mobileDevice) {
+  landslide = 70;
+}else {
+  landslide = 0;
+}
 
 // Малюємо авто
 class cars {
@@ -146,13 +157,13 @@ function level_2() {
 
 // Хвиі
 let wave = [
-{y: 380, x: 0, h: 95, alpha: 1, wave: true},
-{y: 500, x: -234, h: 95, alpha: 1, wave: false},
-{y: 450, x: -354, h: 95, alpha: 1, wave: false},
-{y: 600, x: -500, h: 95, alpha: 1, wave: false},
-{y: 750, x: -1223, h: 95, alpha: 1, wave: false},
-{y: 900, x: -800, h: 95, alpha: 1, wave: false},
-{y: 1000, x: -400, h: 95, alpha: 1, wave: false},
+{y: 380+landslide, x: 0, h: 95, alpha: 1, wave: true},
+{y: 500+landslide, x: -234, h: 95, alpha: 1, wave: false},
+{y: 450+landslide, x: -354, h: 95, alpha: 1, wave: false},
+{y: 600+landslide, x: -500, h: 95, alpha: 1, wave: false},
+{y: 750+landslide, x: -1223, h: 95, alpha: 1, wave: false},
+{y: 900+landslide, x: -800, h: 95, alpha: 1, wave: false},
+{y: 1000+landslide, x: -400, h: 95, alpha: 1, wave: false},
 ];
 
 
@@ -182,7 +193,7 @@ function addWave(i) {
     }else {
       wave[i].alpha = 1;
       wave[i].h = 95;
-      wave[i].y = 1000;
+      wave[i].y = 1000+landslide;
     }
     
   }
@@ -207,8 +218,8 @@ let arrayСarsTop = [];
 let arrayСarsBottom = [];
 let distanceСarsTop = 0;
 let distanceСarsBottom = 0;
-const roadTop = [205,250,295,340];
-const roadBottom = [410,450,500,545];
+const roadTop = [205+landslide,250+landslide,295+landslide,340+landslide];
+const roadBottom = [410+landslide,450+landslide,500+landslide,545+landslide];
 // Створюємо авто на дорозі для 5 рівня
 function addСars_5() {
   if (distanceСarsTop == 0) {
