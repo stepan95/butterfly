@@ -63,7 +63,7 @@ let distanceLife = 1000; // Дестанція для життя '1000'
 let bgX = 0; // Початкова позиція фону
 let speedGame = 1; // Швидкість ігри '1'
 let enemyTime = 600; // Час до появи ворога '600'
-let level = 5; // Рівень
+let level = 1; // Рівень
 let landslide = 0; // Зсув
 
 
